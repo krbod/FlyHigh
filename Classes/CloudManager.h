@@ -20,7 +20,7 @@ public:
 	The higher character fly, The many clouds can be made
 	@param curMeter current mether.
 	*/
-	void MakeCloud(int curMeter);
+	void MakeCloud(CCLayer* layer, int curMeter);
 
 	/** Check if there is a cloud at touch point.
 	If so, return true
@@ -29,16 +29,18 @@ public:
 	bool DeleteCloudAt(CCPoint point);
 
 	/** Move the all clouds to down */
-	void MoveDownAllClouds(float length);
+	void MoveDownAllClouds(CCLayer* layer, float length);
 
 	void AnimateTouchedCloud(int index);
 
 	/** Remove all clouds and clear the vector */
-	void Reset();
+	void Reset(CCLayer* layer);
 
 private:
 	CCTexture2D*			_mCloudTexture;
 	std::vector<CCSprite*>	_mCloudSprites;
+
+	CCSize					_mWinSize;
 };
 
 #endif

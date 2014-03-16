@@ -6,8 +6,8 @@
 void CRecordManager::init(CCLayer* layer)
 {
 	// Get best records.
-	_mBestHeight[CGameMode::kModeLimited] = CCUserDefault::sharedUserDefault()->getIntegerForKey(USER_DEFAULT_LIMITED_BEST_RECORD);
-	_mBestHeight[CGameMode::kModeUnLimited] = CCUserDefault::sharedUserDefault()->getIntegerForKey(USER_DEFAULT_UNLIMITED_BEST_RECORD);
+	_mBestHeight[kModeUnLimited] = CCUserDefault::sharedUserDefault()->getIntegerForKey(USER_DEFAULT_UNLIMITED_BEST_RECORD);
+	_mBestHeight[kModeLimited] = CCUserDefault::sharedUserDefault()->getIntegerForKey(USER_DEFAULT_LIMITED_BEST_RECORD);
 
 	_mBestUpdated = false;
 	_mCurrentBestHeight = 0;
@@ -32,7 +32,7 @@ void CRecordManager::UpdateRecord(float height)
 	if( _mCurHeight > _mCurrentBestHeight )
 		_mCurrentBestHeight = _mCurHeight;
 	
-	CGameMode::E_GameMode mode = CGameMode::GetInstance()->GetGameMode();
+	E_GameMode mode = CGameMode::GetInstance()->GetGameMode();
 	if( _mCurHeight > _mBestHeight[mode] )
 	{
 		_mBestHeight[mode] = _mCurHeight;
@@ -51,13 +51,13 @@ void CRecordManager::SaveBestRecord()
 
 	switch( CGameMode::GetInstance()->GetGameMode() )
 	{
-	case CGameMode::kModeLimited:
+	case kModeLimited:
 		CCUserDefault::sharedUserDefault()->setIntegerForKey(
 			USER_DEFAULT_LIMITED_BEST_RECORD, 
 			_mBestHeight[CGameMode::GetInstance()->GetGameMode()]);
 		break;
 
-	case CGameMode::kModeUnLimited:
+	case kModeUnLimited:
 		CCUserDefault::sharedUserDefault()->setIntegerForKey(
 			USER_DEFAULT_UNLIMITED_BEST_RECORD, 
 			_mBestHeight[CGameMode::GetInstance()->GetGameMode()]);

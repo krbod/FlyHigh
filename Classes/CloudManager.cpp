@@ -7,6 +7,7 @@ const int LEVEL_UPGRADED_PER_METER = 50;
 CCloudManager::CCloudManager()
 {
 	_mCloudTexture = CCTextureCache::sharedTextureCache()->addImage(IMAGE_CLOUD_PATH);
+	_mWinSize = CCDirector::sharedDirector()->getWinSize();
 }
 
 
@@ -15,26 +16,23 @@ CCloudManager::~CCloudManager()
 }
 
 
-void CCloudManager::MakeCloud(int curMeter)
+void CCloudManager::MakeCloud(CCLayer* layer, int curMeter)
 {
-	int level = 1;
+	int level;
 
-	// level is upgraded by each 100m
+	// level up each 50m.
 	if( curMeter > LEVEL_UPGRADED_PER_METER )
 		level = curMeter/LEVEL_UPGRADED_PER_METER + 1;
+	else 
+		level = 1;
 
-	CRandGenerator randGen;
-	int cloudCount = randGen.GetAnyInt(0, level);
+	int cloudCount = CRandGenerator::GetAnyInt(0, level);
 
-	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 	for(int i=0; i<cloudCount; ++i)
 	{
-		CCSprite* cloudSprite = CCSprite::createWithTexture(_mCloudTexture);		
-		cloudSprite->setAnchorPoint(ccp(0.0f, 0.0f));
-		cloudSprite->setPosition( ccp(randGen.GetAnyFloat(0, winSize.width), winSize.height));
-		cloudSprite->setScale(1.3f);
-
-		CCDirector::sharedDirector()->getRunningScene()->addChild( cloudSprite, Z_ORDER_CLOUD );
+		CCSprite* cloudSprite = CCSprite::createWithTexture(_mCloudTexture);	
+		cloudSprite->setPosition( ccp(CRandGenerator::GetAnyFloat(0, _mWinSize.width), _mWinSize.height));
+		layer->addChild(cloudSprite, Z_ORDER_CLOUD );
 
 		_mCloudSprites.push_back(cloudSprite);
 	}
@@ -56,7 +54,7 @@ bool CCloudManager::DeleteCloudAt(CCPoint point)
 	return false;
 }
 
-void CCloudManager::MoveDownAllClouds(float length)
+void CCloudManager::MoveDownAllClouds(CCLayer* layer, float length)
 {
 	for(unsigned int i=0; i<_mCloudSprites.size(); ++i)
 	{
@@ -66,8 +64,7 @@ void CCloudManager::MoveDownAllClouds(float length)
 		// Delete the cloud which is moved under the bottom
 		if( curPoint.y < _mCloudTexture->getContentSize().height * -1 )
 		{
-			CCDirector::sharedDirector()->getRunningScene()->removeChild( _mCloudSprites[i] );
-
+			layer->removeChild( _mCloudSprites[i] );
 			_mCloudSprites.erase(_mCloudSprites.begin() + i);
 			--i;
 		}
@@ -78,11 +75,11 @@ void CCloudManager::MoveDownAllClouds(float length)
 	}
 }
 
-void CCloudManager::Reset()
+void CCloudManager::Reset(CCLayer* layer)
 {
 	for(unsigned int i=0; i<_mCloudSprites.size(); ++i)
 	{
-		CCDirector::sharedDirector()->getRunningScene()->removeChild(_mCloudSprites[i]);
+		layer->removeChild(_mCloudSprites[i]);
 	}
 
 	_mCloudSprites.clear();

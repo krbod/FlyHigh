@@ -2,15 +2,16 @@
 #ifndef __GAME_MODE_H__
 #define __GAME_MODE_H__
 
+enum E_GameMode : short
+{
+	kModeUnLimited,
+	kModeLimited,
+	kModeCount = 2,
+};
+
 class CGameMode
 {
 public:
-	enum E_GameMode
-	{
-		kModeUnLimited,
-		kModeLimited,
-		kModeCount = 2,
-	};
 
 	static CGameMode* GetInstance()
 	{

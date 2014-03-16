@@ -37,7 +37,7 @@ public:
 
 private:
 	
-	int			_mBestHeight[CGameMode::kModeCount];
+	int			_mBestHeight[kModeCount];
 
 	int			_mCurHeight;
 	int			_mCurrentBestHeight;

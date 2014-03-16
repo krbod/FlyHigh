@@ -102,7 +102,7 @@ bool MainGameScene::init()
 
 	_mPlayerDie = false;
 
-	CGameMode::GetInstance()->SetGameMode(CGameMode::kModeUnLimited);
+	CGameMode::GetInstance()->SetGameMode(kModeUnLimited);
 
 	return true;
 }
@@ -155,7 +155,7 @@ void MainGameScene::GameLoop(float dt)
 	}
 	
 	// Check if player has been died.
-	if(CGameMode::GetInstance()->GetGameMode() == CGameMode::kModeLimited)
+	if(CGameMode::GetInstance()->GetGameMode() == kModeLimited)
 	{
 		if( spriteData->getPositionY() - spriteData->getContentSize().height/2 < 0 )
 		{
@@ -199,12 +199,12 @@ void MainGameScene::GameLoop(float dt)
 			// Make new clouds
 			if( _mAccumulatedDiff > DELAY_DISTANCE_FOR_MAKING_CLOUD)
 			{
-				_mCloudManager.MakeCloud(_mRecordManager.GetCurrentHeight() / 10);
+				_mCloudManager.MakeCloud(this, _mRecordManager.GetCurrentHeight() / 10);
 				_mAccumulatedDiff = 0.0f;
 			}
 		
 			// Move existing clouds to down
-			_mCloudManager.MoveDownAllClouds( _mOldDiff - diff );
+			_mCloudManager.MoveDownAllClouds(this, _mOldDiff - diff );
 
 			// Move the "how to play" sprite
 			MoveHowToPlaySpriteDown( _mOldDiff - diff );
@@ -385,7 +385,7 @@ void MainGameScene::ccTouchesEnded(CCSet* pTouches, CCEvent* event)
 
 void MainGameScene::Reset()
 {
-	_mCloudManager.Reset();
+	_mCloudManager.Reset(this);
 
 	CCSprite* sprite = static_cast<CCSprite*>(_mPlayerBody->GetUserData());
 	sprite->setPosition( ccp(_mWinSize.width/2, _mWinSize.height/2));
