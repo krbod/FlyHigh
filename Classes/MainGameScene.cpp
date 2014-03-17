@@ -60,7 +60,7 @@ bool MainGameScene::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !CCLayer::init() )
+    if ( !CCLayerColor::initWithColor(ccc4(0, 162, 232, 255)) )
     {
         return false;
     }
@@ -68,12 +68,7 @@ bool MainGameScene::init()
 	this->setTouchEnabled( true );
 
 	_mWinSize = CCDirector::sharedDirector()->getWinSize();
-	
-	// Draw background image
-	CCSprite* background = CCSprite::create("res/bkg.png");
-	background->setAnchorPoint(ccp(0, 0));
-	this->addChild(background, 0);
-	
+		
 	// Read the best record from user default and draw it.
 	_mRecordManager.init(this);
 	_mRecordManager.SetCurrentHeight(static_cast<int>(_mWinSize.height * FLYING_LINE));
